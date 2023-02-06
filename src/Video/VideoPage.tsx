@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import ReactPlayer from "react-player";
 import {OnProgressProps} from "react-player/base";
 
@@ -7,19 +7,49 @@ interface Settings {
     playAt: number
 }
 
+const myUrl = "https:///hls/pentor_v3.json/master.m3u8?1=1";
+
 export function VideoPage() {
     const [url, setUrl] = useState<Settings>({
         playAt: -1, url: ""
     });
+    const ref = React.useRef<ReactPlayer>(null);
 
 
     const [durationTotal, setDurationTotal] = useState<number>(0)
     const [playerSecond, setPlayerSecond] = useState<number>(0);
+    const [levels, setLevels] = useState<number[]>([]);
+
+    function changeRes(value: number) {
+        const internalPlayer = ref.current?.getInternalPlayer('hls');
+        if (value === -1) {
+            // @ts-ignore
+            internalPlayer.currentLevel = -1;
+        } else {
+            const number = levels.indexOf(value);
+
+            // @ts-ignore
+            internalPlayer.currentLevel = number;
+        }
+    }
+
+    function showButtonRes() {
+        const a = levels.map((value, index) => {
+            return <button onClick={function () {
+                changeRes(value);
+            }}>{value}</button>
+        })
+
+        return <><button onClick={function () {
+            changeRes(-1);
+        }}>auto</button>{a}</>
+    }
 
     return (
         <>
             <div className='player-wrapper'>
                 <ReactPlayer url={url.url}
+                             ref={ref}
                              controls={true}
                              onReady={onReady}
                              onStart={onStart}
@@ -38,26 +68,29 @@ export function VideoPage() {
                 />
             </div>
 
+            <div>
+                {showButtonRes()}
+            </div>
+
             <ul>
-                <li>
-                    <button onClick={function () {
-                        setUrl({
-                            playAt: 1200, url: "https://www.dev.dkups.com/hls/pentor_v3.json/master.m3u8?1=1"
-                        })
-                        console.log("https://www.dev-hls.com/hls/pentor_v3.json/master.m3u8?1=1");
-                    }}>pentor start at 20 minute
-                    </button>
-                </li>
 
                 <li>
                     <button onClick={function () {
                         setUrl({
-                            playAt: 0, url: "https://www.dev.dkups.com/hls/pentor_v3.json/master.m3u8?1=1"
+                            playAt: 0, url: myUrl
                         })
-                        console.log("http://61.19.242.59:84/hls/pentor_v3.json/master.m3u8?1=1");
-                    }}>pentor start at 20 minute1
+                    }}>pentor
                     </button>
                 </li>
+                <li>
+                    <button onClick={function () {
+                        setUrl({
+                            playAt: 1200, url: myUrl
+                        })
+                    }}>pentor start at 20 minute
+                    </button>
+                </li>
+
 
                 <li>
                     <button onClick={function () {
@@ -83,7 +116,7 @@ export function VideoPage() {
     )
 
     function OnProgress(state: OnProgressProps) {
-        console.log('state', state);
+        // console.log('state', state);
         const playedSeconds = Math.floor(state.playedSeconds);
         setPlayerSecond(prevState => {
             if (prevState !== playedSeconds) {
@@ -104,14 +137,26 @@ export function VideoPage() {
 
     function onPlay() {
         console.log('onPlay');
+
     }
 
     function onStart() {
         console.log('onStart');
+
     }
 
     function onReady(player: ReactPlayer) {
         console.log('player', player);
+
+        console.log('getInternalPlayer', ref.current?.getInternalPlayer('hls'))
+        const levels = ref.current?.getInternalPlayer('hls').levels;
+        // console.log('levels', levels)
+        let heights: number[] = [];
+        for (let level of levels) {
+            // console.log('height ', level.height);
+            heights.push(level.height)
+        }
+        setLevels(heights)
     }
 
     function onPause() {
