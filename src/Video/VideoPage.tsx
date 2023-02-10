@@ -7,13 +7,17 @@ interface Settings {
     playAt: number
 }
 
-const myUrl = "https:///hls/pentor_v3.json/master.m3u8?1=1";
+const myUrl = "https://www.dev.dkups.com/hls/pentor_v3.json/master.m3u8?1=1";
+
+const teacher10 = "https://www.dev.dkups.com/hls/teacher10.json/master.m3u8?1=1";
 
 export function VideoPage() {
     const [url, setUrl] = useState<Settings>({
         playAt: -1, url: ""
     });
     const ref = React.useRef<ReactPlayer>(null);
+
+
 
 
     const [durationTotal, setDurationTotal] = useState<number>(0)
@@ -47,6 +51,12 @@ export function VideoPage() {
 
     return (
         <>
+            <input type="text" onChange={function (event) {
+                const value = event.currentTarget.value;
+                setUrl( {
+                    playAt: 0, url: value
+                })
+            }}/>
             <div className='player-wrapper'>
                 <ReactPlayer url={url.url}
                              ref={ref}
@@ -91,6 +101,16 @@ export function VideoPage() {
                     </button>
                 </li>
 
+                <li>
+                    <button onClick={function () {
+                        setUrl({
+                            playAt: -1, url: teacher10
+                        })
+                    }}>จาร 10 นาที
+                    </button>
+                </li>
+
+
 
                 <li>
                     <button onClick={function () {
@@ -111,6 +131,8 @@ export function VideoPage() {
                     </button>
                 </li>
             </ul>
+
+            <span>{levels.map(value => value+ " ")}</span>
 
         </>
     )
