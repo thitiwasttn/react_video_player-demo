@@ -64,35 +64,45 @@ export function ListVideo() {
                     </div>
                 </div>
                 <div className={"row"}>
-                    <div className={"col"}>
-                        <div className="list-group">
-                            {
-                                listVideo.map((value, index) => {
-                                    return <>
-                                        <div className="list-group-item list-group-item-action"
-                                             onClick={function () {
-                                                 gotoVideo(value.id)
-                                             }}>
-                                            <div>
-                                                id: {value.id}
-                                            </div>
-                                            <div>
-                                                name: {value.videoName}
-                                            </div>
-                                            <div>
-                                                isCompressComplete: {statusCompress(value.isCompressComplete)}
-                                            </div>
-
-                                            <div>
-                                                resolution available: {getResolutionAvailable(value.resolutions)}
-                                            </div>
-                                        </div>
-                                    </>
-                                })
-                            }
-
-                        </div>
-                    </div>
+                    {
+                        listVideo.map((value, index) => {
+                            // return <>
+                            //     <div className="list-group-item list-group-item-action"
+                            //          onClick={function () {
+                            //              gotoVideo(value.id)
+                            //          }}>
+                            //         <div>
+                            //             id: {value.id}
+                            //         </div>
+                            //         <div>
+                            //             name: {value.videoName}
+                            //         </div>
+                            //         <div>
+                            //             isCompressComplete: {statusCompress(value.isCompressComplete)}
+                            //         </div>
+                            //
+                            //         <div>
+                            //             resolution available: {getResolutionAvailable(value.resolutions)}
+                            //         </div>
+                            //     </div>
+                            // </>
+                            return <div className={"col-auto mt-2"}>
+                                <div className="card" style={{width: "18rem"}}>
+                                    <div className="card-body">
+                                        <h5 className="card-title">{value.videoName}</h5>
+                                        <h6 className="card-subtitle mb-2 text-muted">id: {value.id}</h6>
+                                        <p className="card-text">isCompressComplete: {statusCompress(value.isCompressComplete)}</p>
+                                        <p className="card-text">resolution available: {getResolutionAvailable(value.resolutions)}</p>
+                                        <button className={"btn btn-primary"} disabled={value.resolutions.length === 0} onClick={function () {
+                                            gotoVideo(value.id)
+                                        }}>
+                                            watch
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        })
+                    }
                 </div>
             </div>
         </>
