@@ -18,7 +18,7 @@ export function ListVideo() {
 
     async function loadData() {
         await getListVideo("thitiwas111").then(async value => {
-            let data: VideoM[] = value.data as VideoM[];
+            let data: VideoM[] = (value.data as VideoM[]).reverse();
             for (let datum of data) {
                 await getListVideoRes("thitiwas111", datum.id).then(value1 => {
                     datum.resolutions = value1.data
@@ -58,9 +58,16 @@ export function ListVideo() {
     return (
         <>
             <div className={"container"}>
+                {/*<div className={"row"}>*/}
+                {/*    <div className={"col text-center"}>*/}
+                {/*        <span className={"fs-1"}>List Video</span>*/}
+                {/*    </div>*/}
+                {/*</div>*/}
                 <div className={"row"}>
-                    <div className={"col text-center"}>
-                        <span className={"fs-1"}>List Video</span>
+                    <div className={"col mt-2"}>
+                        <button className={"btn btn-info"} onClick={function () {
+                            navigateFunction(`${homepage}/upload`)
+                        }}>Upload Video</button>
                     </div>
                 </div>
                 <div className={"row"}>

@@ -25,7 +25,7 @@ interface Settings {
 export function Video() {
     const {id} = useParams();
     const [url, setUrl] = useState<Settings>({
-        playAt: -1, url: `https://www.dev.dkups.com/hls/videos/thitiwas111/${id}/hls/master.m3u8?time=?rma`
+        playAt: -1, url: `http://www.dev-hls.dkups.com/hls/videos/thitiwas111/${id}/hls/master.m3u8?time=?rma`
     });
     const ref = React.useRef<ReactPlayer>(null);
 
