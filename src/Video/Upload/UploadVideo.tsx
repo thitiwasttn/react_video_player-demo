@@ -1,11 +1,16 @@
 import React, {useState} from 'react'
 import {uploadVideo} from "../VideoService";
 import {useNavigate} from "react-router-dom";
+
 const homepage = process.env.PUBLIC_URL;
+
 export function UploadVideo() {
     const [file, setFile] = useState<File>()
     const [name, setName] = useState<string>("")
     const [isLoad, setIsLoad] = useState<boolean>(false)
+    const [l480, setL480] = useState<number>(0)
+    const [l720, setL720] = useState<number>(0)
+    const [l1080, setL1080] = useState<number>(0)
     const navigateFunction = useNavigate();
     return (
         <>
@@ -38,9 +43,55 @@ export function UploadVideo() {
                         </div>
 
                     </div>
+                    <div className={"col-4 mt-5"}>
+                        <div className="input-group mb-3">
+                            <span className="input-group-text" id="basic-addon1">480 bit (Mbps)</span>
+                            <input type="number" className="form-control" placeholder="l480" aria-label="Username"
+                                   value={l480}
+                                   onChange={function (e) {
+                                       const value = Number(e.currentTarget.value);
+                                       if (value !== 0) {
+                                           setL480(value)
+                                       }
+                                   }}
+                                   aria-describedby="basic-addon1"/>
+                        </div>
+
+                    </div>
+                    <div className={"col-4 mt-5"}>
+                        <div className="input-group mb-3">
+                            <span className="input-group-text" id="basic-addon1">720 bit (Mbps)</span>
+                            <input type="text" className="form-control" placeholder="l720" aria-label="Username"
+                                   value={l720}
+                                   onChange={function (e) {
+                                       const value = Number(e.currentTarget.value);
+                                       if (value !== 0) {
+                                           setL720(value)
+                                       }
+                                   }}
+                                   aria-describedby="basic-addon1"/>
+                        </div>
+
+                    </div>
+
+                    <div className={"col-4 mt-5"}>
+                        <div className="input-group mb-3">
+                            <span className="input-group-text" id="basic-addon1">1080 bit (Mbps)</span>
+                            <input type="text" className="form-control" placeholder="l1080" aria-label="Username"
+                                   value={l1080}
+                                   onChange={function (e) {
+                                       const value = Number(e.currentTarget.value);
+                                       if (value !== 0) {
+                                           setL1080(value)
+                                       }
+                                   }}
+                                   aria-describedby="basic-addon1"/>
+                        </div>
+
+                    </div>
                     <div className={"col mt-1"}>
                         <button className={"btn btn-success"}
-                                // disabled={!file && !name}
+                            // disabled={!file && !name}
                                 onClick={function () {
                                     setIsLoad(true);
                                     /*setTimeout(function () {
@@ -48,7 +99,11 @@ export function UploadVideo() {
                                         navigateFunction(`${homepage}/`)
                                     }, 5000)*/
 
-                                    uploadVideo(file, name, undefined, undefined, undefined).then(value => {
+                                    uploadVideo(file,
+                                        name,
+                                        (l480 === 0 ? undefined : l480 * 100000) + "",
+                                        (l720 === 0 ? undefined : l720 * 100000) + "",
+                                        (l1080 === 0 ? undefined : l1080 * 100000) + "").then(value => {
                                         const data = value.data;
                                         alert('upload success')
                                         navigateFunction(`${homepage}/`)

@@ -27,7 +27,7 @@ interface Settings {
 export function VideoV2() {
     const {id} = useParams();
     const [url, setUrl] = useState<Settings>({
-        playAt: -1, url: `https://www./hls/videos/thitiwas111/${id}/hls/master.m3u8?time=?rma`
+        playAt: -1, url: `https://www.dev.dkups.com/hls/videos/eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjcmVhdGVfdGltZSI6IjE2NzY1NDA2MTQ5ODciLCJpc3MiOiJiYWNrZW5kU2VydmljZSIsImlkIjoiNCJ9.W-Z_LEjmtmlI3PDSiubDgvH0BPjNTLw2pQtEo_-zA8c/${id}/hls/master.m3u8?time=?rma`
     });
     const ref = React.useRef<ReactPlayer>(null);
 
