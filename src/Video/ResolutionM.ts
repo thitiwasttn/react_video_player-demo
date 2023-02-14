@@ -3,4 +3,6 @@ export interface ResolutionM {
     "videoId": number,
     "resolution": string
     "fileName": string
+
+    "fileSize": string
 }

@@ -101,9 +101,9 @@ export function UploadVideo() {
 
                                     uploadVideo(file,
                                         name,
-                                        (l480 === 0 ? undefined : l480 * 100000) + "",
-                                        (l720 === 0 ? undefined : l720 * 100000) + "",
-                                        (l1080 === 0 ? undefined : l1080 * 100000) + "").then(value => {
+                                        (l480 === 0 ? undefined : l480 * 1000000) + "",
+                                        (l720 === 0 ? undefined : l720 * 1000000) + "",
+                                        (l1080 === 0 ? undefined : l1080 * 1000000) + "").then(value => {
                                         const data = value.data;
                                         alert('upload success')
                                         navigateFunction(`${homepage}/`)
