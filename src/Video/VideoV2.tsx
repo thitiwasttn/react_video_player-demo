@@ -19,8 +19,9 @@ import dislike from './image/dislike.jpg'
 import ReactPlayer from "react-player";
 import {OnProgressProps} from "react-player/base";
 import {useSearchParams} from "react-router-dom";
-import {getListVideoRes} from "./VideoService";
+import {getListVideoRes, getTranscript} from "./VideoService";
 import {ResolutionM} from "./ResolutionM";
+import {VideoTranscribeM} from "./VideoTranscribeM";
 
 interface Settings {
     url: string
@@ -46,6 +47,7 @@ export function VideoV2() {
     const [levels, setLevels] = useState<any[]>([]);
     const [currentPlayRes, setCurrentPlayRes] = useState<string>("")
     const [size, setSize] = useState<Size[]>([])
+    const [transcript, setTranscript] = useState<string>("");
 
     useEffect(() => {
         const at = searchParams.get("at");
@@ -55,7 +57,7 @@ export function VideoV2() {
         }
         setUrl({
             playAt: num,
-            url: `https://1NiJ9.eyJjcmVhdGVfdGltZSI6IjE2NzY1NDA2MTQ5ODciLCJpc3MiOiJiYWNrZW5kU2VydmljZSIsImlkIjoiNCJ9.W-Z_LEjmtmlI3PDSiubDgvH0BPjNTLw2pQtEo_-zA8c/${id}/hls/master.m3u8?time=?rma`
+            url: `https://www.dev.dkups.com/hls/videos/eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjcmVhdGVfdGltZSI6IjE2NzY1NDA2MTQ5ODciLCJpc3MiOiJiYWNrZW5kU2VydmljZSIsImlkIjoiNCJ9.W-Z_LEjmtmlI3PDSiubDgvH0BPjNTLw2pQtEo_-zA8c/${id}/hls/master.m3u8?time=?rma`
         })
 
         getListVideoRes("thitiwas111", Number(id)).then(value => {
@@ -68,6 +70,15 @@ export function VideoV2() {
                 })
             }
             setSize(sizeTemp);
+        })
+
+        getTranscript("thitiwas111", Number(id)).then(value => {
+            const data = value.data as VideoTranscribeM[];
+            console.log('data', data);
+            if (data.length > 0) {
+                let videoTranscribeM = data[0];
+                setTranscript(videoTranscribeM.rawText)
+            }
         })
     }, [])
 
@@ -241,12 +252,22 @@ export function VideoV2() {
                     <div className={"col-12 mt-3"}>
                         {
                             size.map(value => {
-                                return <span className="badge text-bg-secondary me-1">Resolution: {value.res} <br/>Size: {value.size}</span>
+                                return <span className="badge text-bg-secondary me-1">Resolution: {value.res}
+                                    <br/>Size: {value.size}</span>
                             })
                         }
-
                     </div>
                 </div>
+                <div className={"row"}>
+                    <div className={"col-12 mt-3"}>
+                        <div className="card">
+                            <div className="card-body">
+                                {transcript}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className={"mt-3"}/>
             </div>
         </>
     )

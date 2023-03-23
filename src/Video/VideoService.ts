@@ -1,13 +1,14 @@
 import axios from "axios";
 import {VideoM} from "./VideoM";
 import {ResolutionM} from "./ResolutionM";
+import {VideoTranscribeM} from "./VideoTranscribeM";
 
 export function getListVideo(token: string) {
-    return axios.get<VideoM[]>(`https://www./vod/api/v1/videos?token=${token}`);
+    return axios.get<VideoM[]>(`https://www.dev.dkups.com/vod/api/v1/videos?token=${token}`);
 }
 
 export function getListVideoRes(token: string, videoId: number) {
-    return axios.get<ResolutionM[]>(`https://www./vod/api/v1/resolution/${videoId}/?token=${token}`);
+    return axios.get<ResolutionM[]>(`https://www.dev.dkups.com/vod/api/v1/resolution/${videoId}/?token=${token}`);
 }
 
 export function uploadVideo(file?: File, name?: string, l480?: string, l720?: string, l1080?: string) {
@@ -34,5 +35,13 @@ export function uploadVideo(file?: File, name?: string, l480?: string, l720?: st
     //     }
     // });\
 
-    return axios.post(`https://www./vod/api/v1/upload`, data);
+    return axios.post(`https://www.dev.dkups.com/vod/api/v1/upload`, data);
+}
+
+export function getTranscript(token: string, videoId: number) {
+    return axios.get<VideoTranscribeM[]>(`https://www.dev.dkups.com/vod/api/v1/transcript/${videoId}/?token=${token}`);
+}
+
+export function searchVideo(token: string, keyword: string) {
+    return axios.get<VideoM[]>(`https://www.dev.dkups.com/vod/api/v1/search/${keyword}/?token=${token}`);
 }

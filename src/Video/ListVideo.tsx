@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {VideoM} from "./VideoM";
-import {getListVideo, getListVideoRes} from "./VideoService";
+import {getListVideo, getListVideoRes, searchVideo} from "./VideoService";
 import {useNavigate} from "react-router-dom";
 import {ResolutionM} from "./ResolutionM";
 
@@ -14,6 +14,7 @@ const homepage = process.env.PUBLIC_URL;
 
 export function ListVideo() {
     const [listVideo, setListVideo] = useState<VideoM[]>([])
+    const [keyWord, setKeyWord] = useState<string>("");
     const navigateFunction = useNavigate();
 
     async function loadData() {
@@ -27,6 +28,26 @@ export function ListVideo() {
             setListVideo(data)
         })
     }
+
+    function searchProcess(keyWord: string) {
+        searchVideo("thitiwas111", keyWord).then(async value => {
+            let data: VideoM[] = (value.data as VideoM[])
+            for (let datum of data) {
+                await getListVideoRes("thitiwas111", datum.id).then(value1 => {
+                    datum.resolutions = value1.data
+                })
+            }
+            setListVideo(data)
+        })
+    }
+
+    useEffect(() => {
+        if (keyWord) {
+            searchProcess(keyWord);
+        } else {
+            loadData()
+        }
+    }, [keyWord])
 
     useEffect(() => {
         loadData()
@@ -67,42 +88,40 @@ export function ListVideo() {
                     <div className={"col mt-2"}>
                         <button className={"btn btn-info"} onClick={function () {
                             navigateFunction(`${homepage}/upload`)
-                        }}>Upload Video</button>
+                        }}>Upload Video
+                        </button>
+                    </div>
+                </div>
+                <div className={"row"}>
+                    <div className={"col-12 mt-2"}>
+                        <div className="input-group mb-3">
+                            <span className="input-group-text" id="basic-addon1">keyword</span>
+                            <input type="text" className="form-control"
+                                   value={keyWord}
+                                   onChange={function (event) {
+                                       const value = event.currentTarget.value;
+                                       setKeyWord(value);
+                                   }}
+                                   placeholder="keyword"/>
+                        </div>
                     </div>
                 </div>
                 <div className={"row"}>
                     {
                         listVideo.map((value, index) => {
-                            // return <>
-                            //     <div className="list-group-item list-group-item-action"
-                            //          onClick={function () {
-                            //              gotoVideo(value.id)
-                            //          }}>
-                            //         <div>
-                            //             id: {value.id}
-                            //         </div>
-                            //         <div>
-                            //             name: {value.videoName}
-                            //         </div>
-                            //         <div>
-                            //             isCompressComplete: {statusCompress(value.isCompressComplete)}
-                            //         </div>
-                            //
-                            //         <div>
-                            //             resolution available: {getResolutionAvailable(value.resolutions)}
-                            //         </div>
-                            //     </div>
-                            // </>
+
                             return <div className={"col-auto mt-2"}>
                                 <div className="card" style={{width: "18rem"}}>
                                     <div className="card-body">
                                         <h5 className="card-title">{value.videoName}</h5>
                                         <h6 className="card-subtitle mb-2 text-muted">id: {value.id}</h6>
                                         <p className="card-text">isCompressComplete: {statusCompress(value.isCompressComplete)}</p>
-                                        <p className="card-text">resolution available: {getResolutionAvailable(value.resolutions)}</p>
-                                        <button className={"btn btn-primary"} disabled={value.resolutions.length === 0} onClick={function () {
-                                            gotoVideo(value.id)
-                                        }}>
+                                        <p className="card-text">resolution
+                                            available: {getResolutionAvailable(value.resolutions)}</p>
+                                        <button className={"btn btn-primary"} disabled={value.resolutions.length === 0}
+                                                onClick={function () {
+                                                    gotoVideo(value.id)
+                                                }}>
                                             watch
                                         </button>
                                     </div>
